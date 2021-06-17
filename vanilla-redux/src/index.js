@@ -1,22 +1,39 @@
+import { createStore } from "redux";
 const add = document.getElementById("add");
 const minus = document.getElementById("minus");
 const number = document.querySelector("span");
 
-let count = 0;
-
-const updateCount = () => {
-	number.innerText = count;
+//store is just space of data
+// what reducer returns is a data of store
+//count = 0 is just initial value, it mean currentValue in redux
+//### reducer ###
+const countModifier = (count = 0, action) => {
+	if(action.type === "ADD"){
+		return count + 1; //what it returns become a data of store count is just current value at all
+	}
+	else if(action.type ==="MINUS"){
+		return count - 1;
+	}
+	else{
+		return count;		
+	}
 }
 
-const handleAdd = () =>{
-	count = count + 1;
-	updateCount();
+//only reducer who given as args to createStore can modify data called reducer normally
+//### createModifier ###
+const countStore = createStore(countModifier);
+
+const onChange = () => {
+	number.innerText = countStore.getState();
 }
 
-const handleMinus = () =>{
-	count = count - 1;
-	updateCount();
-}
+//### subscribe ###
+countStore.subscribe(onChange); //it allows me to listen change in data(state) then call callback function granted (ex)onChange)
 
-add.addEventListener("click", handleAdd);
-minus.addEventListener("click", handleMinus);
+add.addEventListener("click", ()=>{
+	countStore.dispatch({type : 'ADD'});
+})
+minus.addEventListener("click", ()=>{
+	countStore.dispatch({type : 'MINUS'});
+})
+
