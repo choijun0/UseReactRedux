@@ -6,7 +6,6 @@ const ul = document.querySelector("ul");
 const ADD = "ADD";
 const DELETE = "DELETE";
 //don't mutate state (ex)store.getState.push ~~) just return new state only!!
-
 //action is usually written over reducer 
 const addTodo = text =>{
 	return{
@@ -14,13 +13,12 @@ const addTodo = text =>{
 		todoText : text
 	}
 }
-const deleteTodo = (id) =>{
+const deleteTodo = id =>{
 	return{
 		type : DELETE,
 		id
 	}
 }
-
 const reducer = (state = [], action) =>{
 	switch(action.type){
 		case ADD:
@@ -35,9 +33,9 @@ const reducer = (state = [], action) =>{
 
 const store = createStore(reducer);
 
+
 const paintTodos = () =>{
 	const todos = store.getState();
-
 	ul.innerHTML = ""; //clear ul
 	todos.forEach(todo => {
 			const li = document.createElement("li");
@@ -71,3 +69,5 @@ const handleInsert = (e) =>{
 	input.focus();
 }	
 form.addEventListener("submit", handleInsert);
+//##dispatch### 
+//I can grant reducer to action by using disaptch function
