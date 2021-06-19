@@ -1,39 +1,73 @@
 import { createStore } from "redux";
-const add = document.getElementById("add");
-const minus = document.getElementById("minus");
-const number = document.querySelector("span");
+const form = document.querySelector("form");
+const input = document.querySelector("input");
+const ul = document.querySelector("ul");
 
-//store is just space of data
-// what reducer returns is a data of store
-//count = 0 is just initial value, it mean currentValue in redux
-//### reducer ###
-const countModifier = (count = 0, action) => {
-	if(action.type === "ADD"){
-		return count + 1; //what it returns become a data of store count is just current value at all
+const ADD = "ADD";
+const DELETE = "DELETE";
+//don't mutate state (ex)store.getState.push ~~) just return new state only!!
+
+//action is usually written over reducer 
+const addTodo = text =>{
+	return{
+		type : ADD,
+		todoText : text
 	}
-	else if(action.type ==="MINUS"){
-		return count - 1;
-	}
-	else{
-		return count;		
+}
+const deleteTodo = (id) =>{
+	return{
+		type : DELETE,
+		id
 	}
 }
 
-//only reducer who given as args to createStore can modify data called reducer normally
-//### createModifier ###
-const countStore = createStore(countModifier);
-
-const onChange = () => {
-	number.innerText = countStore.getState();
+const reducer = (state = [], action) =>{
+	switch(action.type){
+		case ADD:
+		  //state.push(action.todoText); <- mutation
+		  return [{text:action.todoText, id : Date.now()}, ...state];
+		case DELETE:
+		  return state.filter(toDo => toDo.id !== action.id); //filter return new!! array that pass test
+		default:
+		return state;
+	}
 }
 
-//### subscribe ###
-countStore.subscribe(onChange); //it allows me to listen change in data(state) then call callback function granted (ex)onChange)
+const store = createStore(reducer);
 
-add.addEventListener("click", ()=>{
-	countStore.dispatch({type : 'ADD'});
-})
-minus.addEventListener("click", ()=>{
-	countStore.dispatch({type : 'MINUS'});
-})
+const paintTodos = () =>{
+	const todos = store.getState();
 
+	ul.innerHTML = ""; //clear ul
+	todos.forEach(todo => {
+			const li = document.createElement("li");
+			const btn = document.createElement("button");
+			btn.innerText = "Del";
+			btn.addEventListener("click", dispatchDeleteTodo);
+		  li.innerText = todo.text;
+			li.id = todo.id;
+			li.appendChild(btn);
+		  ul.appendChild(li);
+	})
+}
+
+store.subscribe(paintTodos);
+
+
+const dispatchAddTodo = text => {
+	store.dispatch(addTodo(text));
+}
+
+const dispatchDeleteTodo = e => {
+	const id = parseInt(e.target.parentNode.id); //data from html is string so turn it to integer
+	console.log(id);
+	store.dispatch(deleteTodo(id));
+}
+
+const handleInsert = (e) =>{
+	e.preventDefault();
+	dispatchAddTodo(input.value);
+	input.value = "";
+	input.focus();
+}	
+form.addEventListener("submit", handleInsert);
