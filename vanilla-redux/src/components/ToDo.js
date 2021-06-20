@@ -1,11 +1,17 @@
 import React from "react";
 import {connect} from "react-redux";
 import { actionCreators } from "../store"
+import { Link } from "react-router-dom";
 
-const ToDo = ({text, deleteToDo}) => {
+//<Link to={`/${id}`}> same as <Link to={ { pathname : `/${id}`} }>
+
+const ToDo = ({text, id, deleteToDo}) => {
 	return (
 		<li> 
-		{text} <button onClick={deleteToDo}>Del</button>
+		<Link to={`/${id}`}>
+		{text} 
+		</Link>
+		<button onClick={deleteToDo}>Del</button>
 	  </li>
 	 );
 }
