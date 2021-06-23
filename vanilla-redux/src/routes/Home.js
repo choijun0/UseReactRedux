@@ -36,6 +36,8 @@ const mapStateToProps = (state, props) =>{
 
 //dispatch reponds to store.dispatch function
 const mapDispatchToProps = (dispatch, props) => {
+	//when i hand args to addTodo(out of createAction) will be payload value
+	// int this case addTodo.payload = text
 	return {addTodo : text => dispatch(actionCreators.addTodo(text))};
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
