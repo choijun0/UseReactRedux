@@ -1,6 +1,6 @@
 import {createStore} from "redux";
 import { writeFile } from "./text/fileInOut";
-import {createAction, createReducer} from "@reduxjs/toolkit";
+import {createAction, createReducer, configureStore, createSlice} from "@reduxjs/toolkit";
 
 //Const
 const addTodo = createAction("ADD");
@@ -21,7 +21,7 @@ const reducer = (state=[], action) => {
 }
 */
 
-//CreateReducer
+//##CreateReducer##
 //!!mutate state (don't return) or return new state!!
 //if I mutate state createReducer out of ReduxToolkit transfrom it to return new state automatically
 const reducer = createReducer([], {
@@ -35,7 +35,9 @@ const reducer = createReducer([], {
 	}
 });
 
-const store = createStore(reducer);
+//[ChromeExtention : ReduxDevTool]https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=ko
+//이걸사용해서 reduxToolkit을 이용하는 사이트의 흐름을 볼 수 있다 ex> AirBnB
+const store = configureStore({reducer});
 
 store.subscribe(()=>{
 	
