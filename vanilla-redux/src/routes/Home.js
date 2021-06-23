@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { connect } from "react-redux";
-import { actionCreators } from "../store"
+import { add } from "../store"
 import ToDo from "../components/ToDo"
 
 const Home = ({toDos, addTodo}) => {
@@ -38,6 +38,6 @@ const mapStateToProps = (state, props) =>{
 const mapDispatchToProps = (dispatch, props) => {
 	//when i hand args to addTodo(out of createAction) will be payload value
 	// int this case addTodo.payload = text
-	return {addTodo : text => dispatch(actionCreators.addTodo(text))};
+	return {addTodo : text => dispatch(add(text))};
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
